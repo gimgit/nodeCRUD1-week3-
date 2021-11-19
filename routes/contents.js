@@ -4,11 +4,15 @@ var router = express.Router();
 
 const MongoClient = require('mongodb').MongoClient;
 var db;
-MongoClient.connect('mongodb+srv://hshsnamu:058402cool@cluster0.wljzs.mongodb.net/hanghae99?retryWrites=true&w=majority',  
+MongoClient.connect('mongodb+srv://wedineinhell:spartan@cluster0.wljzs.mongodb.net/hanghae99?retryWrites=true&w=majority',  
     {useUnifiedTopology: true }, function(err, client){
     if(err) {return console.log('err')}
 
     db = client.db('hanghae99');
+
+    // app.listen(3000, function(){
+    //     console.log('listening on 3000')
+    // })
 });
 
     router.get('/edit/:id', function(req, res){
@@ -30,17 +34,13 @@ MongoClient.connect('mongodb+srv://hshsnamu:058402cool@cluster0.wljzs.mongodb.ne
     
 
       function editAuth(req,res,next){
-        // db.collection('post').findOne({_id: parseInt(req.params.id)}), function(err, result){
-            // let standardDb = db.collection('post').findOne({"_id": 22 })
-            db.collection('post').findOne({_id: parseInt(req.body.id) }, function(err, result){
+           db.collection('post').findOne({_id: parseInt(req.body.id) }, function(err, result){
                 let dbPw = result.password;
                 let editPw = req.body.password;
-                console.log(dbPw);
-                console.log(editPw);
                 if (editPw == dbPw){
                     next();
                 }else{
-                    console.log('비밀번호확인')
+                    console.log('Password incorrect')
                 }    
             })
         }

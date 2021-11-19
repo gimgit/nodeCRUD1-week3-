@@ -14,14 +14,14 @@ const writeRouter = require('./routes/write');
 app.use('/write',writeRouter)
 
 var db;
-MongoClient.connect('mongodb+srv://hshsnamu:058402cool@cluster0.wljzs.mongodb.net/hanghae99?retryWrites=true&w=majority',  
+MongoClient.connect('mongodb+srv://wedineinhell:spartan@cluster0.wljzs.mongodb.net/hanghae99?retryWrites=true&w=majority',  
     {useUnifiedTopology: true }, function(err, client){
     if(err) {return console.log('err')}
 
     db = client.db('hanghae99');
 
-    app.listen(8080, function(){
-        console.log('listening on 8080')
+    app.listen(3000, function(){
+        console.log('listening on 3000')
     })
 });
 

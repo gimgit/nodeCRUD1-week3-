@@ -3,11 +3,14 @@ var router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 
 var db;
-MongoClient.connect('mongodb+srv://hshsnamu:058402cool@cluster0.wljzs.mongodb.net/hanghae99?retryWrites=true&w=majority',  
+MongoClient.connect('mongodb+srv://wedineinhell:spartan@cluster0.wljzs.mongodb.net/hanghae99?retryWrites=true&w=majority',  
     {useUnifiedTopology: true }, function(err, client){
     if(err) {return console.log('err')}
 
     db = client.db('hanghae99');
+  //   app.listen(3000, function(){
+  //     console.log('listening on 3000')
+  // })
 });
 
 router.post('/add', function(req, res){  //목차로 이동
@@ -28,7 +31,7 @@ router.post('/add', function(req, res){  //목차로 이동
           db.collection('counter').updateOne({name : 'numberOfPost'},{ $inc : {totalPost:1} },function(err, result){})
             if(err){return console.log('err')}
 
-        res.redirect('http://localhost:8080/list');
+        res.redirect('http://localhost:3000/list');
         });
 
     });
