@@ -3,18 +3,21 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const methodOverride = require('method-override')
 const MongoClient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
 const app = express();
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(methodOverride('_method'))
 app.set('view engine', 'ejs');
 
 //라우터 연결(콘텐츠수정, 작성)
-const contentsRouter = require('./routes/contents');
-app.use('/contents',contentsRouter);
-const writeRouter = require('./routes/write');
-app.use('/write',writeRouter)
+const usersRouter = require('./routers/users')
+app.use('/api', [usersRouter]);
+const contentsRouter = require('./routers/contents');
+app.use('/contents',[contentsRouter]);
+const writeRouter = require('./routers/write');
+app.use('/write', [writeRouter])
 
-// 몽고 디비 연결(atlas)
+
 var db;
 MongoClient.connect('mongodb+srv://wedineinhell:spartan@cluster0.wljzs.mongodb.net/hanghae99?retryWrites=true&w=majority',  
     {useUnifiedTopology: true }, function(err, client){
@@ -50,3 +53,36 @@ app.get('/detail/:id', function(req, res){
     res.render('detail.ejs', { data : result});  
   })
 })
+
+// 로그인 페이지 렌더
+app.get('/login', async(req, res)=>{
+    res.render('login.ejs')
+})
+
+// 회원가입 페이지 렌더
+app.get('/signUp', async(req, res)=>{
+    res.render('signUp.ejs')
+})
+
+
+// function getSelf(callback) {
+//     $.ajax({
+//       type: "GET",
+//       url: "/api/users/me",
+//       headers: {
+//         authorization: `Bearer ${localStorage.getItem("token")}`,
+//       },
+//       success: function (response) {
+//         callback(response.user);
+//       },
+//       error: function (xhr, status, error) {
+//         if (status == 401) {
+//           alert("로그인이 필요합니다.");
+//         } else {
+//           localStorage.clear();
+//           alert("알 수 없는 문제가 발생했습니다. 관리자에게 문의하세요.");
+//         }
+//         window.location.href = "/";
+//       },
+//     });
+//   }

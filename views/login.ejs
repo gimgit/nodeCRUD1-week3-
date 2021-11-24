@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+    <title>항해 블로그</title>
+    
+    <style>
+      body{
+          background-color: #ced5b1;
+      }
+      .content-box{
+          border-radius: 5%; 
+          width: 50%; 
+          height: 40vh; 
+          margin: 100px auto; 
+          padding: 1em; 
+          background-color: #f5f5dc;
+      }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+  <!-- <script src= "../users/me"></script> -->
+  <script>
+      if (localStorage.getItem('token')) {
+        getSelf(() => {
+          alert('이미 로그인이 되어있습니다.');
+          window.location.replace('/posts');
+        });
+      }
+    // 로그인 실행
+    function loginEvent() {
+        
+        const nickname = $('#nickname').val()
+        const password = $('#password').val()
+        $.ajax({
+            type: "POST",
+            url: "/api/auth",
+            data: {
+                nickname: nickname,
+                password: password,
+            },
+            success: function (response) {
+                localStorage.setItem("token", response.token);
+                window.location.replace("/list")
+            },
+            error: function (error) {
+                alert(error.responseJSON.errorMessage)
+            },
+        });
+    }
+    
+    function getSelf(callback) {
+      $.ajax({
+          type: 'GET',
+          url: '/api/users/me',
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          success: function (response) {
+            callback(response.user);
+          },
+          error: function (error) {
+            localStorage.clear();
+            alert(error.responseText);
+            window.location.href = '/login';
+          },
+        });
+      }
+
+      // function getSelf(callback) {
+      //   $.ajax({
+      //     type: "GET",
+      //     url: "/api/users/me",
+      //     headers: {
+      //       authorization: `Bearer ${localStorage.getItem("token")}`,
+      //     },
+      //     success: function (response) {
+      //       callback(response.user);
+      //     },
+      //     error: function (xhr, status, error) {
+      //       if (status == 401) {
+      //         alert("로그인이 필요합니다.");
+      //       } else {
+      //         localStorage.clear();
+      //         alert("알 수 없는 문제가 발생했습니다. 관리자에게 문의하세요.");
+      //       }
+      //       window.location.href = "/login";
+      //     },
+      //   });
+      // }
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/login" >로그인</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="/list">게시판 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/write">게시물작성</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div class="jumbotron content-box">
+        <form>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">nickname</label>
+              <input type="email" class="form-control" id="nickname" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password">
+            </div>
+          </form>
+          <button onclick="loginEvent()">로그인</button>
+          <button onclick="location.href = '/signUp'">회원가입</button>
+       
+        </div>
+
+        
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script> -->
+  </body>
+</html>
